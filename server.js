@@ -7,7 +7,9 @@ app.use(express.static(path.join(__dirname, './client/build')));
 // create a GET route
 app.get('/', (req, res) => { //Line 9
     // res.send("HELLO THERE")
-    res.sendFile(path.join(__dirname, "./client/build/index.html"));
+
+    
+    res.sendFile(path.join(__dirname, "../client/build/index.html"));
   }); //Line 11
 
 // create a GET route
