@@ -2,7 +2,7 @@ const express = require('express'); //Line 1
 const app = express(); //Line 2
 const path = require('path');
 const port = process.env.PORT || 5000; //Line 3
-app.use(express.static(path.join(__dirname, './client/build')));
+app.use(express.static(path.join(__dirname, '../client/build')));
 
 // create a GET route
 app.get('/', (req, res) => { //Line 9
