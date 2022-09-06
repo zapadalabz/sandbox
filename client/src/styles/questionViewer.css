@@ -1,0 +1,56 @@
+.questionViewer {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: hidden; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  }
+
+  .qBox {
+    background-color: #fefefe;
+    margin: 1rem auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+    max-height: 80%;
+    overflow-y: auto;
+  }
+
+  .closeButton{
+    float: right;
+  }
+
+  .submitButton{
+    float: right;
+  }
+
+  /*radio buttons*/
+  .mcq_answer{
+
+  }
+
+  .mcq_answer label{
+    cursor: pointer;
+  }
+
+  .mcq_answer input:checked + label{
+    font-weight: bold;
+    color:#225633;
+  }
+
+  .correct{
+    display: flex;
+    color:green;
+    gap: 1rem;
+  }
+
+  .incorrect{
+    display: flex;
+    color:red;
+    gap: 1rem;
+  }

@@ -1,0 +1,37 @@
+.challengeCard{
+    width:80vw;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 0.5rem;
+    margin-left: 0.5rem;
+    box-shadow: 5px 10px 10px grey;
+    padding-left: 5%;
+    padding-right: 5%;
+    padding-top: 2%;
+    padding-bottom: 2%;
+}
+
+.challengeBar{
+    border: 2px solid black;
+    border-radius: 5rem;
+    width: 80%;
+    margin-left: 1rem;
+}
+
+.challengeBar-Easy{
+    background-color: green;
+    min-height: 25px;
+    border-top-left-radius: 2.5rem;
+    border-bottom-left-radius: 2.5rem;
+    padding:0;
+}
+.challengeBar-Medium{
+    background-color: orange;
+    min-height: 25px;
+}
+.challengeBar-Hard{
+    background-color: red;
+    min-height: 25px;
+    border-top-right-radius: 2.5rem;
+    border-bottom-right-radius: 2.5rem;
+}

@@ -1,38 +1,116 @@
-.App {
-  text-align: center;
+.mainContainer{
+  width: 100vw;
+  overflow-x: hidden; /* Disable horizontal scroll */
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.studentContainer{
+  width: 20vw;
+}
+.studentNav{
+  width:20vw
+}
+.dataContainer{
+  width: 80vw; 
+  height: 85vh;
+  overflow-y: auto;
+  overflow-x: wrap;
+}
+.skillCard{
+  width:80%;
+  margin-left: auto;
+  margin-right: auto;
+  box-shadow: 5px 10px 10px grey;
+  padding-left: 5%;
+  padding-right: 5%;
+  padding-top: 2%;
+  padding-bottom: 2%;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+
+.dropbtn {
+  background-color: #225633;
+  color: white;
+  padding: 6px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  width: 20vw;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  width: 20vw;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-content a:hover {background-color: #f1f1f1}
+
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.dropdown:hover .dropbtn {
+  text-decoration: underline;
+}
+
+.topicBar{
+  background-color: white;
+}
+.topicItem{
+  padding-right: 3px;
+  padding-left: 3px;
+  padding-bottom: 2px;
+}
+.selectedTopic{
+  background-color: #225633;
   color: white;
 }
-
-.App-link {
-  color: #61dafb;
+.selectedTopic:hover{
+  color:white;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.studentImg{
+  height: 20vw;
+}
+
+label {
+  margin-left: 0.5rem;
+  margin-right:0.5rem;
+}
+
+.settings{
+  max-width: 80vw;
+  padding-left: 75px;
+  margin-right:auto;
+  margin-left: auto;
+}
+
+.customQuiz{
+  max-width: 80vw;
+  padding-left: 75px;
+  margin-right:auto;
+  margin-left: auto;
+}
+
+.courseSaveBtn{
+  position:fixed;
+  bottom: 2%;
+  right:15%;
 }

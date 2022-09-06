@@ -10,69 +10,152 @@ const dbo = require("../db/conn");
 
 // This help convert the id from string to ObjectId for the _id.
 const ObjectId = require("mongodb").ObjectId;
+//let myquery = { _id: ObjectId( req.params.id )};
 
+/***************************************/
+//              General                //
+/***************************************/
 
-// This section will help you get a list of all the records.
-recordRoutes.route("/record").get(function (req, res) {
-  let db_connect = dbo.getDb("BH");
-  db_connect
-    .collection("records")
-    .find({})
-    .toArray(function (err, result) {
-      if (err) throw err;
-      res.json(result);
-    });
-});
-
-// This section will help you get a single record by id
-recordRoutes.route("/record/:id").get(function (req, res) {
+//getStudent
+recordRoutes.route("/api/user/getUser/:id").get(function (req, res) {
   let db_connect = dbo.getDb();
-  let myquery = { _id: ObjectId( req.params.id )};
+  let myquery = {UserId: req.params.id};
+  
   db_connect
-      .collection("records")
+      .collection("User")
       .findOne(myquery, function (err, result) {
         if (err) throw err;
         res.json(result);
       });
 });
 
-// This section will help you create a new record.
-recordRoutes.route("/record/add").post(function (req, response) {
+//post newUser Record
+recordRoutes.route("/api/user/newUser").post(function (req, response) {
   let db_connect = dbo.getDb();
+  let myquery = { UserId: req.body.id};
   let myobj = {
-    name: req.body.name,
-    position: req.body.position,
-    level: req.body.level,
+    $set: req.body
   };
-  db_connect.collection("records").insertOne(myobj, function (err, res) {
+  db_connect.collection("User").updateOne(myquery, myobj, { upsert: true },function (err, res) {
     if (err) throw err;
     response.json(res);
   });
 });
 
-// This section will help you update a record by id.
-recordRoutes.route("/update/:id").post(function (req, response) {
-  let db_connect = dbo.getDb();  
-  let myquery = { _id: ObjectId( req.params.id )};  
-  let newvalues = {    
-    $set: {      
-      name: req.body.name,     
-      position: req.body.position,      
-      level: req.body.level,    
-  },  
-};
-});
-
-// This section will help you delete a record
-recordRoutes.route("/:id").delete((req, response) => {
+//post newUser Empty Quiz Stats
+recordRoutes.route("/api/user/:type/newUserQuizStats").post(function (req, response) {
+  let courseType = req.params.type;
   let db_connect = dbo.getDb();
-  let myquery = { _id: ObjectId( req.params.id )};
-  db_connect.collection("records").deleteOne(myquery, function (err, obj) {
+  let myquery = { UserId: req.body.id, topicNum: req.body.topicNum};
+  let myobj = {
+    $set: req.body
+  };
+  db_connect.collection(courseType+"QuizStats").updateOne(myquery, myobj, { upsert: true },function (err, res) {
     if (err) throw err;
-    console.log("1 document deleted");
-    response.json(obj);
+    response.json(res);
   });
 });
+
+//get user Quiz Stats
+recordRoutes.route("/api/user/:type/getUserQuizStats/:topics/:UserId").get(function (req, res) {
+  let courseType = req.params.type;
+  let topics = JSON.parse(req.params.topics);
+  let UserId = req.params.UserId;
+  let db_connect = dbo.getDb();
+  let myquery = { UserId: UserId, topicNum: {$in: topics}};
+  db_connect
+      .collection(courseType+"QuizStats")
+      .aggregate(
+        [
+          {$match: myquery},
+      ]).toArray((error, result) => {
+        if(error) {
+            return res.status(500).send(error);
+        }
+        res.send(result);
+    });
+});
+
+
+/***************************************/
+//                  LO                 //
+/***************************************/
+
+//Get a list of the possible topics for the course type
+recordRoutes.route("/api/LO/getTopicDirectory/:type").get(function (req, res) {
+  let courseType = req.params.type;
+  let db_connect = dbo.getDb();
+  let myquery = { type: "Directory"};
+  
+  db_connect
+      .collection(courseType+"LO")
+      .findOne(myquery, function (err, result) {
+        if (err) throw err;
+        res.json(result);
+      });
+});
+
+
+/***************************************/
+//               COURSE                //
+/***************************************/
+//Post course Settings
+recordRoutes.route("/api/courses/:id").post(function (req, response) {
+  let db_connect = dbo.getDb();
+  let myquery = { courseID: req.params.id};
+  let myobj = {
+    $set:{
+          type: req.body.type,
+          topics: req.body.topics,
+          members: req.body.members
+      }
+  };
+  db_connect.collection("Courses").updateOne(myquery, myobj, { upsert: true },function (err, res) {
+    if (err) throw err;
+    response.json(res);
+  });
+});
+
+//Get Course Details
+recordRoutes.route("/api/getCourse/:OrgUnitId").get(function (req, res) {
+  let db_connect = dbo.getDb();
+  let myquery = { courseID: req.params.OrgUnitId};
+  db_connect
+      .collection("Courses")
+      .findOne(myquery, function (err, result) {
+        if (err) throw err;
+        res.json(result);
+      });
+});
+
+/***************************************/
+//                  QB                 //
+/***************************************/
+
+//Get random sample of Questions based on section
+//Get Course Details
+recordRoutes.route("/api/QB/getQuestions/:type/:sections/:numQ").get(function (req, res) {
+  let courseType = req.params.type;
+  let sections = JSON.parse(req.params.sections);
+  let numQ = parseInt(req.params.numQ);
+  let db_connect = dbo.getDb();
+  let myquery = { section: {$in: sections}};
+  db_connect
+      .collection(courseType+"QB")
+      .aggregate(
+        [
+          {$match: myquery},
+          {$sample:{size: numQ}}
+      ]).toArray((error, result) => {
+        if(error) {
+            return res.status(500).send(error);
+        }
+        res.send(result);
+    });
+});
+
+
+
 
 // Adds/Updates user of OrgUnit by email
 recordRoutes.route("/api/update").post(function (req, response) {
@@ -99,6 +182,28 @@ recordRoutes.route("/api/updateSkillsTemplate").post(function (req, response) {
       }
   };
   db_connect.collection(req.body.OrgUnitId).updateOne(myquery, myobj, { upsert: true },function (err, res) {
+    if (err) throw err;
+    response.json(res);
+  });
+});
+
+//UpdateChemistry Learning Objectives
+recordRoutes.route("/api/updateChemistryLO").post(function (req, response) {
+  let db_connect = dbo.getDb();
+  let myquery = {};
+  let myobj = req.body;
+  db_connect.collection("ChemistryLO").insertOne(myobj, { upsert: true },function (err, res) {
+    if (err) throw err;
+    response.json(res);
+  });
+});
+
+//UpdateChemistry QuestionBank
+recordRoutes.route("/api/updateChemistryQB").post(function (req, response) {
+  let db_connect = dbo.getDb();
+  let myquery = {};
+  let myobj = req.body;
+  db_connect.collection("ChemistryQB").insertOne(myobj, { upsert: true },function (err, res) {
     if (err) throw err;
     response.json(res);
   });

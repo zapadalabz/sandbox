@@ -1,6 +1,7 @@
 const express = require('express'); //Line 1
 const app = express(); //Line 2
 const path = require('path');
+require("dotenv").config({ path: "./config.env" });
 const port = process.env.PORT || 5000; //Line 3
 const cors = require("cors");
 app.use(cors());
@@ -8,7 +9,6 @@ app.use(express.json());
 app.use(require("./routes/record"));
 const dbo = require("./db/conn");
 app.use(express.static(path.join(__dirname, 'client/build')));
-
 
 // create a GET route
 app.get('/express_backend', (req, res) => { //Line 9
