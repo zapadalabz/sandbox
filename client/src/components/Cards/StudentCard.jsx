@@ -39,7 +39,7 @@ export default function StudentCard(props){
         const [reflectionToggle, setReflectionToggle] = useState(false);
 
         if(student.reflections){
-            var reflections = Object.entries(student.reflection);
+            var reflections = Object.entries(student.reflections);
         }else{
             var reflections = [];
         }
