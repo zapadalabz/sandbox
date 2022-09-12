@@ -154,7 +154,70 @@ recordRoutes.route("/api/QB/getQuestions/:type/:sections/:numQ").get(function (r
     });
 });
 
+/***************************************/
+//             Student Data            //
+/***************************************/
+//Post initial Student data for a class
+recordRoutes.route("/api/initStudent").post(function (req, response) {
+  let db_connect = dbo.getDb();
+  let myquery = { email: req.body.email};
+  let myobj = {
+    $set:{
+          name: req.body.name,
+          courseID: req.body.courseID,
+          userThumb: req.body.userThumb
+      }
+  };
+  db_connect.collection("Student").updateOne(myquery, myobj, { upsert: true },function (err, res) {
+    if (err) throw err;
+    response.json(res);
+  });
+});
 
+//Get students from Course
+recordRoutes.route("/api/getStudents/:OrgUnitId").get(function (req, res) {
+  let db_connect = dbo.getDb();
+  let myquery = { courseID: req.params.OrgUnitId};
+  db_connect
+      .collection("Student")
+      .find(myquery)
+      .toArray(function (err, result) {
+        if (err) throw err;
+        res.json(result);
+      });
+});
+
+//Post Add Parents
+recordRoutes.route("/api/addParents").post(function (req, response) {
+  let db_connect = dbo.getDb();
+  let myquery = { userThumb: req.body.userThumb};
+  let myobj = {
+    $set:{
+          parents: req.body.parents
+      }
+  };
+  db_connect.collection("Student").updateOne(myquery, myobj, { upsert: true },function (err, res) {
+    if (err) throw err;
+    response.json(res);
+  });
+});
+
+//Post Reflection
+recordRoutes.route("/api/addReflection").post(function (req, response) {
+  let db_connect = dbo.getDb();
+  let myquery = { email: req.body.email };
+  let key = "reflections."+req.body.title;
+  let myobj = {
+    $set:{
+          
+      }
+  };
+  myobj["$set"][key] = req.body.reflection;
+  db_connect.collection("Student").updateOne(myquery, myobj, { upsert: true },function (err, res) {
+    if (err) throw err;
+    response.json(res);
+  });
+});
 
 
 // Adds/Updates user of OrgUnit by email

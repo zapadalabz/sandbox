@@ -104,3 +104,54 @@ export async function newUser(user, course){
     //post template for Reflections
     
 }
+
+export async function initStudent(data){
+    const response = await fetch(`/api/initStudent`, {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+        'Content-Type': 'application/json'
+        },
+    }).catch(error => {
+        window.alert(error);
+        return;
+    });
+
+    const post = await response.json();
+
+    return post;
+}
+
+export async function addParents(data){
+    const response = await fetch(`/api/addParents`, {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+        'Content-Type': 'application/json'
+        },
+    }).catch(error => {
+        window.alert(error);
+        return;
+    });
+
+    const post = await response.json();
+
+    return post;
+}
+
+export async function addReflection(data){
+    const response = await fetch(`/api/addReflection`, {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+        'Content-Type': 'application/json'
+        },
+    }).catch(error => {
+        window.alert(error);
+        return;
+    });
+
+    const post = await response.json();
+
+    return post;
+}

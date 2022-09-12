@@ -1,0 +1,60 @@
+.cardContainer{
+    width:80vw;
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    box-shadow: 5px 10px 10px grey;
+}
+
+.namePlaque{
+    width:20%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.studentImg{
+    border-radius: 50%;
+    width: 50%;
+    height: auto;
+}
+
+.parentInfo{
+    display:flex;
+    flex-direction: row;
+}
+
+.studentData{
+    width:80%;
+}
+
+.reflectionContainer{
+    display: none;
+    height: 10rem;
+    overflow-y: auto;
+}
+
+.toggleContainer{
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    background-color: #225633;
+}
+
+
+.reflectionToggleBtn {
+    background-color: #225633;
+    color: white;
+    padding: 3px;
+    font-size: 12px;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+  }
+    
+  .reflectionToggleBtn :hover{
+    text-decoration: underline;
+    color:white;
+  }

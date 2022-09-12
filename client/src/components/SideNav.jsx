@@ -31,6 +31,7 @@ export default function SideNav(props) {
         <div className="menuContent flex-column" ref={navContent}>
             <NavLink className="navBtn" to="/">Custom Quiz</NavLink>
             <NavLink className="navBtn" to="/Settings">Settings</NavLink>
+            <NavLink className="navBtn" to="/Upload">Upload</NavLink>
         </div>
         
     </div>

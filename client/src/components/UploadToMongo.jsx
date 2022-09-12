@@ -2,11 +2,14 @@ import React, { useState, useEffect } from "react";
 import {} from "react-router";
 import { useSearchParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import { initStudent, addParents, addReflection } from "../scripts/postData";
 
 export default function UploadToMongo(){
     //const OrgUnitId = props.OrgUnitId;
     const [file, setFile] = useState();
     const [array, setArray] = useState([]);
+    const [type, setType] = useState("initClass");
+    const [title, setTitle] = useState("");
     const user = window.user;
 
     const fileReader = new FileReader();
@@ -14,6 +17,14 @@ export default function UploadToMongo(){
     const handleOnChange = (e) => {
         setFile(e.target.files[0]);
     };
+
+    const typeChange = (e) => {
+      setType(e.target.value);
+    }
+
+    const handleTitleOnChange = (e) => {
+      setTitle(e.target.value);
+    }
 
     const csvFileToArray = async string => {
         //const csvHeader = string.slice(0, string.indexOf("\n")).split(",");
@@ -58,19 +69,34 @@ export default function UploadToMongo(){
         //console.log(event.target.result);
         var obj = JSON.parse(event.target.result);
         //console.log(obj[0].type)
-        for(var i = 0; i < obj.length; i++){
-          await fetch(`/api/updateChemistryQB`, {//updateChemistryLO
-            method: "POST",
-            body: JSON.stringify(obj[i]),
-            headers: {
-            'Content-Type': 'application/json'
-            },
-          }).catch(error => {
-            window.alert(error);
-            return;
+        if(type == "initClass"){
+          //console.log(obj);
+          obj.map((student,index)=>{
+            //console.log(student.name,student.email, window.user.OrgUnitId);//and CourseCode
+            if(student.teacherType !== "Teacher"){
+              initStudent({"name":student.name,"email":student.email,"courseID":window.user.OrgUnitId, "userThumb": student.userThumb});
+            }
           });
-        }
-        
+        }else if(type == "addParents"){
+          console.log(obj);
+          obj.Students.map((student,index)=>{
+            //console.log(student.PhotoUrl, student.Parents);
+            addParents({"userThumb":student.PhotoUrl,"courseID":window.user.OrgUnitId,"parents":student.Parents});
+          });
+        }else if(type == "reflection"){
+          for(var i = 0; i < obj.length; i++){
+            let data = {"email" : obj[i].Username, "title": title};
+            var temp = obj[i];
+            delete temp["Username"];
+            delete temp["Timestamp"];
+            data["reflection"] = temp;
+            addReflection(data);
+            console.log(data);
+          }
+          
+        }else{
+          console.log("Who Knows???");
+        }        
       }
 
       const headerKeys = Object.keys(Object.assign({}, ...array));
@@ -78,7 +104,7 @@ export default function UploadToMongo(){
     return(
         <div>
             <h1>Upload JSON to Mongo</h1>
-            <div style={{ textAlign: "center" }}>
+            <div className="settings" style={{ textAlign: "center" }}>
                 <form>
                     <input
                         type={"file"}
@@ -86,6 +112,12 @@ export default function UploadToMongo(){
                         accept={".json"}
                         onChange={handleOnChange}
                     />
+                    <select id = "type" onChange={typeChange}>
+                        <option value="initClass">Initialize Class</option>
+                        <option value="addParents">Add Parents</option>
+                        <option value="reflection">Add/Update Reflection</option>
+                    </select>
+                    {type=="reflection"?<input type="text" id="reflectionTitle" onChange={handleTitleOnChange}></input>:""}
                     <button onClick={(e) => {handleOnSubmit(e);}}>
                         Upload
                     </button>

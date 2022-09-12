@@ -13,6 +13,8 @@ import Admin from "./components/UploadToMongo"
 import Settings from "./components/Instructor/Settings"
 import SideNav from "./components/SideNav"
 import CustomQuiz from "./components/Learner/CustomQuiz";
+import StudentPage from "./components/StudentPage";
+import UploadToMongo from "./components/UploadToMongo";
 //Scripts
 import { getCourse, getUser } from "./scripts/getData";
 import { newUser, newStudentQuizStats } from "./scripts/postData"
@@ -75,7 +77,9 @@ function App() {
       
       <div className = "mainContainer d-flex flex-row">
         <Routes>
-          <Route exact path="/" element={loading?"Loading":<CustomQuiz/>} />
+          <Route exact path="/" element={loading?"Loading":<StudentPage/>} />
+          <Route exact path="/CustomQuiz" element={loading?"Loading":<CustomQuiz/>} />
+          <Route exact path="/Upload" element={loading?"Loading":<UploadToMongo/>} />
           <Route exact path="/Settings" element={loading?"Loading":<Settings/>} />
         </Routes>
       </div>

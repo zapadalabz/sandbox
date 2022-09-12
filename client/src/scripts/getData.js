@@ -135,3 +135,17 @@ export async function getStudentData(OrgUnitId) {
 
     return temp;
 }
+
+export async function getStudent(OrgUnitId) {
+    const response = await fetch(`/api/getStudents/${OrgUnitId}`);
+
+    if (!response.ok) {
+      const message = `An error occurred: ${response.statusText}`;
+      window.alert(message);
+      return;
+    }
+
+    const data = await response.json();
+
+    return data;
+}
